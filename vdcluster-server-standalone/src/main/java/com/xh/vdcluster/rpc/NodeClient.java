@@ -27,27 +27,6 @@ public class NodeClient {
             configuration.setServiceId("test_id_123");
             configuration.setDecodeMode(1);
             configuration.setStreamURL("rtsp://admin:hk1234567890@10.200.9.225:554/h264/ch1/sub/av_stream");
-        /*TTransport transport = new TSocket("10.200.9.130", 9090);
-        transport.open();
-        TProtocol protocol = new TBinaryProtocol(transport);
-        DetectService.Client messagequeue = new DetectService.Client(protocol);
-
-        List<Integer> typeList = new ArrayList<Integer>();
-        typeList.add(1);
-        typeList.add(2);
-        configuration.setDetectType(typeList);
-        configuration.setStreamType(1);
-        Map<Integer, Double> detectSensitivity = new HashMap<>();
-        detectSensitivity.put(1, 0.3);
-        detectSensitivity.put(2, 0.4);
-        configuration.setDetectSensitivity(detectSensitivity);
-        configuration.setFrameWidth(1080);
-        configuration.setFrameHeight(768);
- /*       while (true) {
-            int result = messagequeue.addService(configuration);
-            Thread.sleep(10);
-        }*/
-//        transport.close();
             TProtocolFactory tProtocolFactory = new TCompactProtocol.Factory();
             TAsyncClientManager tAsyncClientManager = new TAsyncClientManager();
             TNonblockingSocket tNonblockingSocket = new TNonblockingSocket("10.200.9.130", 9090);

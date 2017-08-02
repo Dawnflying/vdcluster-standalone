@@ -5,6 +5,84 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="servant_id" jdbcType="VARCHAR" property="servantId" />
     <result column="stream_Id" jdbcType="VARCHAR" property="streamId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, servant_id, stream_Id, user_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from vdservant
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from vdservant
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.xh.vdcluster.repository.model.VdServant">
+    insert into vdservant (id, servant_id, stream_Id, 
+      user_id)
+    values (#{id,jdbcType=INTEGER}, #{servantId,jdbcType=VARCHAR}, #{streamId,jdbcType=VARCHAR}, 
+      #{userId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xh.vdcluster.repository.model.VdServant">
+    insert into vdservant
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="servantId != null">
+        servant_id,
+      </if>
+      <if test="streamId != null">
+        stream_Id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="servantId != null">
+        #{servantId,jdbcType=VARCHAR},
+      </if>
+      <if test="streamId != null">
+        #{streamId,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xh.vdcluster.repository.model.VdServant">
+    update vdservant
+    <set>
+      <if test="servantId != null">
+        servant_id = #{servantId,jdbcType=VARCHAR},
+      </if>
+      <if test="streamId != null">
+        stream_Id = #{streamId,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xh.vdcluster.repository.model.VdServant">
+    update vdservant
+    set servant_id = #{servantId,jdbcType=VARCHAR},
+      stream_Id = #{streamId,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <resultMap id="BaseResultMap" type="com.xh.vdcluster.repository.model.VdServant">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="servant_id" jdbcType="VARCHAR" property="servantId" />
+    <result column="stream_Id" jdbcType="VARCHAR" property="streamId" />
   </resultMap>
   <sql id="Base_Column_List">
     id, servant_id, stream_Id
@@ -68,4 +146,6 @@
       stream_Id = #{streamId,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="listServantByUserId" parameterType=""
 </mapper>

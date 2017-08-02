@@ -7,6 +7,8 @@ public class VdServant {
 
     private String streamId;
 
+    private Integer userId;
+
     public Integer getId() {
         return id;
     }
@@ -29,5 +31,13 @@ public class VdServant {
 
     public void setStreamId(String streamId) {
         this.streamId = streamId == null ? null : streamId.trim();
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 }

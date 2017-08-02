@@ -1,5 +1,6 @@
 package com.xh.vdcluster.controller;
 
+import com.xh.vdcluster.authenication.TokenManager;
 import com.xh.vdcluster.common.*;
 import com.xh.vdcluster.common.annotation.Auth;
 import com.xh.vdcluster.service.TokenService;
@@ -8,9 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import javax.annotation.Resource;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +28,9 @@ public class StreamController {
     @RequestMapping("/register-stream")
     @Auth("register")
     public VdResult registerStream(@RequestParam(name = "userId") String userId, @RequestBody VdRequest requestBody) {
+
+        if (!TokenManager.checkTokenExpiration(requestBody.getToken()))
+            return new VdResult("token expired", VdResultErrorCode.TOKEN_EXPIRED, null, userId);
 
         int code = tokenService.validate(userId, requestBody.getToken());
 
@@ -51,7 +53,7 @@ public class StreamController {
             configurationList.add(configuration);
         }
 
-        return vdService.addServant(userId, requestBody.getToken(), configurationList);
+        return vdService.addServant(userId, configurationList);
 
     }
 
@@ -69,7 +71,7 @@ public class StreamController {
         } else {
 
 
-            return vdService.removeServant(userId, token, servantIds);
+            return vdService.removeServant(userId, servantIds);
         }
     }
 

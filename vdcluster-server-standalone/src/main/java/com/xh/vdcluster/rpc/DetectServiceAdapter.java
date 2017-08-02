@@ -8,13 +8,13 @@ import java.util.List;
 /**
  * Created by bloom on 2017/7/28.
  */
-public class DetectServiceAdapter extends AbstractServiceAdapter implements DetectService.Iface {
+public class DetectServiceAdapter extends AbstractServiceAdapter  {
 
     public DetectServiceAdapter(String host, int port) throws TException {
         super(host,port);
     }
 
-    @Override
+
     public void ping() {
         try {
             client.ping();
@@ -23,7 +23,6 @@ public class DetectServiceAdapter extends AbstractServiceAdapter implements Dete
         }
     }
 
-    @Override
     public void addService(DetectServiceConfiguration serviceConfig){
         try {
             client.addService(serviceConfig);
@@ -32,7 +31,6 @@ public class DetectServiceAdapter extends AbstractServiceAdapter implements Dete
         }
     }
 
-    @Override
     public SeviceStatusType deleteService(String serviceId) {
         try {
             return client.deleteService(serviceId);
@@ -42,7 +40,6 @@ public class DetectServiceAdapter extends AbstractServiceAdapter implements Dete
         }
     }
 
-    @Override
     public SeviceStatusType checkService(String serviceId) {
         try {
             return client.checkService(serviceId);
@@ -52,7 +49,6 @@ public class DetectServiceAdapter extends AbstractServiceAdapter implements Dete
         }
     }
 
-    @Override
     public int getMaxServiceNum() {
         try {
             return client.getMaxServiceNum();
@@ -62,7 +58,6 @@ public class DetectServiceAdapter extends AbstractServiceAdapter implements Dete
         }
     }
 
-    @Override
     public List<String> getServices() {
         try {
             return client.getServices();
@@ -71,6 +66,5 @@ public class DetectServiceAdapter extends AbstractServiceAdapter implements Dete
             return null;
         }
     }
-
 
 }

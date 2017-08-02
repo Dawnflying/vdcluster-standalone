@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="vdcluster-server-standalone:war">
+    <output-path>$PROJECT_DIR$/vdcluster-server-standalone/target/vdcluster_server_standalone_war</output-path>
+    <root id="archive" name="vdcluster-server-standalone_war.war">
+      <element id="artifact" artifact-name="vdcluster-server-standalone:war exploded" />
+    </root>
+  </artifact>
+</component>

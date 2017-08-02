@@ -2,45 +2,34 @@ package com.xh.vdcluster.vdmanager;
 
 import com.xh.vdcluster.common.DetectServiceConfiguration;
 import com.xh.vdcluster.common.Md5Utils;
-import com.xh.vdcluster.repository.mapper.ServantMapper;
-import com.xh.vdcluster.rpc.DetectService;
-import com.xh.vdcluster.vdmanager.beans.VdServant;
-
-import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import com.xh.vdcluster.vdmanager.beans.VdNode;
+import com.xh.vdcluster.vdmanager.beans.VdServantBean;
+import java.util.*;
 
 /**
  * Created by macbookpro on 17/7/22.
  */
 public class VdServantManager extends AbstractServantAdapter {
 
-    @Resource
-    DetectService.Iface detectService;
-
-    private VdServantManager() {
-    }
-
-    private static VdServantManager INSTANCE = new VdServantManager();
-
-    public static VdServantManager getInstance() {
-        return INSTANCE;
-    }
 
     public static String generateServantId(String url) {
         return Md5Utils.MD5(url);
     }
 
-    public VdServant createServant(DetectServiceConfiguration configuration) {
-        return new VdServant(configuration);
+
+    private VdServantManager() {
+        super();
     }
 
-    public List<VdServant> createServants(List<DetectServiceConfiguration> configurationList) {
-        List<VdServant> servants = new ArrayList<>();
+    /**
+     * 创建servants
+     * @param configurationList
+     * @return
+     */
+    public List<VdServantBean> createServants(List<DetectServiceConfiguration> configurationList) {
+        List<VdServantBean> servants = new ArrayList<>();
         for (DetectServiceConfiguration configuration : configurationList) {
-            VdServant servant = new VdServant(configuration);
+            VdServantBean servant = new VdServantBean(configuration);
             servants.add(servant);
             String servantId = generateServantId(configuration.streamURL);
             this.servantMaps.put(servantId, servant);
@@ -52,52 +41,71 @@ public class VdServantManager extends AbstractServantAdapter {
      * 停止服务列表,如果servantIds为空,则停止用户的所有服务,如果servantIds不为空,则停止列表中
      * 所有正在运行的服务。
      *
-     * @param userId     用户id
      * @param servantIds 服务列表
      * @return
      */
-    public List<VdServant> stopServants(String userId, List<String> servantIds) {
-        List<VdServant> servants = this.getServantsAvailable(userId, servantIds);
+    public List<VdServantBean> stopServants(List<String> servantIds) {
 
-        for (VdServant vds : servants) {
+        List<VdServantBean> servantBeans = this.getServantsAvailable(servantIds);
 
-        }
-        return servants;
+        return servantBeans;
     }
 
-    public List<VdServant> removeServants(String userId, List<String> servantIds) {
+    /**
+     * 删除所有的servants
+     * @param servantIds
+     * @return
+     */
+    public List<VdServantBean> removeServants(List<String> servantIds) {
 
-        List<VdServant> servants = this.getServantsAvailable(userId, servantIds);
+        List<VdServantBean> servantBeans = this.getServantsAvailable(servantIds);
 
-        for (VdServant vds : servants) {
+        for (VdServantBean vds : servantBeans) {
             servantMaps.remove(vds);
         }
-        return servants;
+
+        for (String servantId : servantIds) {
+            if (servantMaps.containsKey(servantId)) {
+                servantMaps.get(servantId).setState(VdServantBean.DELETING);
+            }
+        }
+
+        return servantBeans;
     }
 
     /**
      * 获取和用户id相关的可用的servant的列表。
      *
-     * @param userId
      * @param servantIds
      * @return
      */
-    private List<VdServant> getServantsAvailable(String userId, List<String> servantIds) {
-        List<VdServant> servants = new ArrayList<>(servantMaps.values());
+    private List<VdServantBean> getServantsAvailable(List<String> servantIds) {
+
+        List<VdServantBean> servants = new ArrayList<>(servantMaps.values());
 
         if (servantIds.size() == 0) {
-            //删除当亲啊用户所有的servant
             return servants;
         }
-        List<VdServant> servantsAvailable = new ArrayList<>();
+
+        List<VdServantBean> servantsAvailable = new ArrayList<>();
 
         for (String sid : servantIds) {
-            for (VdServant servant : servants) {
+            for (VdServantBean servant : servants) {
                 if (servant.getServantId() == sid) {
                     servantsAvailable.add(servant);
                 }
             }
         }
+
         return servantsAvailable;
+    }
+
+
+    public List<VdNode> getNodeList() {
+        return nodeList;
+    }
+
+    public void setNodeList(List<VdNode> nodeList) {
+        this.nodeList = nodeList;
     }
 }

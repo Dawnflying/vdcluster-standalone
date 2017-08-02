@@ -1,45 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:mvc="http://www.springframework.org/schema/mvc"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
-          destroy-method="close">
-        <property name="driverClassName" value="${datasource.driver}" />
-        <property name="url" value="${datasource.url}" />
-        <property name="username" value="${datasource.username}" />
-        <property name="password" value="${datasource.password}" />
-        <!-- 初始化连接大小 -->
-        <property name="initialSize" value="${initialSize}"></property>
-        <!-- 连接池最大数量 -->
-        <property name="maxActive" value="${maxActive}"></property>
-        <!-- 连接池最大空闲 -->
-        <property name="maxIdle" value="${maxIdle}"></property>
-        <!-- 连接池最小空闲 -->
-        <property name="minIdle" value="${minIdle}"></property>
-        <!-- 获取连接最大等待时间 -->
-        <property name="maxWait" value="${maxWait}"></property>
-    </bean>
 
-    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <property name="dataSource" ref="dataSource" />
-        <!-- 自动扫描mapping.xml文件 -->
-        <property name="mapperLocations" value="classpath:sqlmaps/*.xml"></property>
-    </bean>
-
-    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.xh.vdcluster.repository.mapper" />
-        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
-    </bean>
-
-    <bean id="transactionManager"
-          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="dataSource" />
+    <bean name="vdNode1" class="com.xh.vdcluster.vdmanager.beans.VdNode">
+        <property name="ipAddress" value="${node1.thrift.remoteHost}"/>
+        <property name="port" value="${node1.thrift.remotePort}"/>
     </bean>
 
     <bean id="vdServantManager" class="com.xh.vdcluster.vdmanager.VdServantManager">
-
+        <property name="nodeList">
+            <list>
+                <ref bean="vdNode1"/>
+            </list>
+        </property>
     </bean>
+
+    <bean id="messageAdapter" class="com.xh.vdcluster.rabbitmq.MessageAdapter">
+        <property name="hostName" value="${hostname}"/>
+        <property name="password" value="${password}"/>
+        <property name="port" value="${port}"/>
+        <property name="userName" value="${username}"/>
+        <property name="virtualHost" value="${virtualhost}"/>
+    </bean>
+
+    <bean id="reportService" class="com.xh.vdcluster.service.impl.ReportServiceImpl"/>
+
+    <bean id="detectServiceOutAdapter" class="com.xh.vdcluster.rpc.ReportServiceAdapter">
+        <constructor-arg name="serverPort" value="${thrift.localPort}"/>
+        <constructor-arg name="service" ref="reportService"/>
+    </bean>
+
+
 </beans>

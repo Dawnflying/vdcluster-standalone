@@ -28,7 +28,7 @@ public abstract class AbstractServiceAdapter {
 
     private ExecutorService pool = Executors.newCachedThreadPool();
 
-    private boolean isConnected = false;
+    public boolean isConnected = false;
 
     private boolean isStopped = false;
 
@@ -44,6 +44,7 @@ public abstract class AbstractServiceAdapter {
         this.host = host;
         this.port = port;
         listeners = new ConcurrentHashMap<>();
+
     }
 
     public void start(){

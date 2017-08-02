@@ -6,11 +6,13 @@ import com.xh.vdcluster.repository.model.Stream;
 /**
  * Created by macbookpro on 17/7/22.
  */
-public class VdServant {
+public class VdServantBean {
 
     public static final int RUNNING = 0;
     public static final int STOPPED = 1;
     public static final int CREATED = 2;
+    public static final int DELETING = 3;
+    public static final int DELETED = 4;
 
     private String servantId;
 
@@ -20,7 +22,7 @@ public class VdServant {
 
     private DetectServiceConfiguration configuration;
 
-    public VdServant(DetectServiceConfiguration configuration) {
+    public VdServantBean(DetectServiceConfiguration configuration) {
         this.configuration = configuration;
     }
 

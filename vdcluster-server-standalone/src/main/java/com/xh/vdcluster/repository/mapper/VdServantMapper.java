@@ -2,6 +2,8 @@ package com.xh.vdcluster.repository.mapper;
 
 import com.xh.vdcluster.repository.model.VdServant;
 
+import java.util.List;
+
 public interface VdServantMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -14,4 +16,6 @@ public interface VdServantMapper {
     int updateByPrimaryKeySelective(VdServant record);
 
     int updateByPrimaryKey(VdServant record);
+
+    List<VdServant> listServantByUserId(String userId);
 }
