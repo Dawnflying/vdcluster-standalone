@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xh.vdcluster.repository.mapper.VdServantMapper">
+  <resultMap id="BaseResultMap" type="com.xh.vdcluster.repository.model.VdServant">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="servant_id" jdbcType="VARCHAR" property="servantId" />
+    <result column="stream_Id" jdbcType="VARCHAR" property="streamId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, servant_id, stream_Id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from servant
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from servant
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.xh.vdcluster.repository.model.VdServant">
+    insert into servant (id, servant_id, stream_Id
+      )
+    values (#{id,jdbcType=INTEGER}, #{servantId,jdbcType=VARCHAR}, #{streamId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.xh.vdcluster.repository.model.VdServant">
+    insert into servant
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="servantId != null">
+        servant_id,
+      </if>
+      <if test="streamId != null">
+        stream_Id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="servantId != null">
+        #{servantId,jdbcType=VARCHAR},
+      </if>
+      <if test="streamId != null">
+        #{streamId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xh.vdcluster.repository.model.VdServant">
+    update servant
+    <set>
+      <if test="servantId != null">
+        servant_id = #{servantId,jdbcType=VARCHAR},
+      </if>
+      <if test="streamId != null">
+        stream_Id = #{streamId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xh.vdcluster.repository.model.VdServant">
+    update servant
+    set servant_id = #{servantId,jdbcType=VARCHAR},
+      stream_Id = #{streamId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
