@@ -40,17 +40,17 @@ public class ReportServiceImpl implements ReportService.Iface {
                 detectServiceInAdapter.addListener("test", new TransportListener() {
                     @Override
                     public void onConnected() {
-                        List<DetectType> detectTypes = new ArrayList<>();
-                        detectTypes.add(new DetectType("smoke", 0.9));
-                        DetectServiceConfiguration configuration = new DetectServiceConfiguration();
-                        configuration.setDetectType(detectTypes);
-                        configuration.setStreamType(0);
-                        configuration.setDecodeMode(0);
-                        configuration.setServiceId("123123123123123");
-                        configuration.setFrameHeight(300);
-                        configuration.setFrameWidth(400);
-                        configuration.setStreamURL("rtsp://admin:hk1234567890@10.200.9.225:554/h264/ch1/sub/av_stream");
-                        detectServiceInAdapter.addService(configuration);
+//                        List<DetectType> detectTypes = new ArrayList<>();
+//                        detectTypes.add(new DetectType("smoke", 0.9));
+//                        DetectServiceConfiguration configuration = new DetectServiceConfiguration();
+//                        configuration.setDetectType(detectTypes);
+//                        configuration.setStreamType(0);
+//                        configuration.setDecodeMode(0);
+//                        configuration.setServiceId("123123123123123");
+//                        configuration.setFrameHeight(300);
+//                        configuration.setFrameWidth(400);
+//                        configuration.setStreamURL("rtsp://admin:hk1234567890@10.200.9.225:554/h264/ch1/sub/av_stream");
+//                        detectServiceInAdapter.addService(configuration);
                     }
 
                     @Override
@@ -90,13 +90,13 @@ public class ReportServiceImpl implements ReportService.Iface {
             ClassPathResource fileResource = new ClassPathResource("/config/fdfs_client.conf");
             ClientGlobal.init(fileResource.getFile().getAbsolutePath());
             String picUrl = detectResult.getPreviewPicURL();
-            String newUrl = FastdfsHelper.uploadFile(picUrl);
-            detectResult.setPreviewPicURL(newUrl);
-            messageService.pushMessage("", detectResult.toString());
+//            String newUrl = FastdfsHelper.uploadFile(picUrl);
+//            detectResult.setPreviewPicURL(newUrl);
+//            messageService.pushMessage("", detectResult.toString());
             System.out.println(detectResult.toString());
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+           log.info(e.getMessage());
         }
     }
 }

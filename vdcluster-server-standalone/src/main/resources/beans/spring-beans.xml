@@ -17,7 +17,7 @@
         </property>
     </bean>
 
-    <bean id="messageAdapter" class="com.xh.vdcluster.rabbitmq.MessageAdapter">
+    <bean id="messageAdapter" class="com.xh.vdcluster.message.rabbitmq.MessageAdapter">
         <property name="hostName" value="${hostname}"/>
         <property name="password" value="${password}"/>
         <property name="port" value="${port}"/>

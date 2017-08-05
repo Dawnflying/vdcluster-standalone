@@ -1,25 +1,41 @@
-package com.xh.vdcluster.rabbitmq;
+package com.xh.vdcluster.message.rabbitmq;
 
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
+import com.xh.vdcluster.message.MessageHandler;
 
 import java.io.IOException;
 
 /**
  * Created by bloom on 2017/7/20.
  */
-public class MessageAdapter {
+public class MessageAdapter implements MessageHandler{
 
+    /**
+     * 用户名
+     */
     private String userName;
 
+    /**
+     * 密码
+     */
     private String password;
 
+    /**
+     * 主机名
+     */
     private String hostName;
 
+    /**
+     * 端口
+     */
     private Integer port;
 
+    /**
+     * 虚拟主机
+     */
     private String virtualHost;
 
     private ConnectionFactory connectionFactory;
@@ -74,6 +90,16 @@ public class MessageAdapter {
                         .userId("bob")
                         .build(),
                 messageBodyBytes);
+    }
+
+    @Override
+    public void subscribeMessage(String topic) {
+
+    }
+
+    @Override
+    public void disconnect() throws Exception {
+
     }
 
     public String getUserName() {

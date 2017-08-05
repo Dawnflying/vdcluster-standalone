@@ -8,22 +8,20 @@ import java.util.List;
 /**
  * Created by bloom on 2017/7/28.
  */
-public class DetectServiceAdapter extends AbstractServiceAdapter  {
+public class DetectServiceAdapter extends AbstractServiceAdapter {
 
     public DetectServiceAdapter(String host, int port) throws TException {
-        super(host,port);
+        super(host, port);
     }
 
 
-    public void ping() {
-        try {
-            client.ping();
-        } catch (TException t) {
+    public void ping() throws TException {
 
-        }
+        client.ping();
+
     }
 
-    public void addService(DetectServiceConfiguration serviceConfig){
+    public void addService(DetectServiceConfiguration serviceConfig) {
         try {
             client.addService(serviceConfig);
         } catch (TException t) {

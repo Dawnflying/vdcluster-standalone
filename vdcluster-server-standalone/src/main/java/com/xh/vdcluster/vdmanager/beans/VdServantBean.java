@@ -24,6 +24,11 @@ public class VdServantBean {
 
     public VdServantBean(DetectServiceConfiguration configuration) {
         this.configuration = configuration;
+        this.servantId = configuration.getServiceId();
+        this.state = VdServantBean.CREATED;
+        this.stream = new Stream();
+        this.stream.setUri(configuration.getStreamURL());
+        this.stream.setServantId(configuration.getServiceId());
     }
 
     public String getServantId() {

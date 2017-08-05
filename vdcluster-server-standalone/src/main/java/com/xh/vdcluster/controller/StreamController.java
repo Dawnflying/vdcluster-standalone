@@ -29,9 +29,6 @@ public class StreamController {
     @Auth("register")
     public VdResult registerStream(@RequestParam(name = "userId") String userId, @RequestBody VdRequest requestBody) {
 
-        if (!TokenManager.checkTokenExpiration(requestBody.getToken()))
-            return new VdResult("token expired", VdResultErrorCode.TOKEN_EXPIRED, null, userId);
-
         int code = tokenService.validate(userId, requestBody.getToken());
 
         if (VdResultErrorCode.ISFAILED(code))
@@ -57,11 +54,11 @@ public class StreamController {
 
     }
 
-    @RequestMapping("/unregisterStream")
+    @RequestMapping("/unregister-stream")
     @Auth("unregister")
-    public VdResult unregisterStream(@RequestParam(name = "token") String token, @RequestParam(name = "userId") String userId, @RequestParam(name = "servantIds") List<String> servantIds) {
+    public VdResult unregisterStream(@RequestParam(name = "userId") String userId, @RequestBody VdRequest requestBody) {
 
-        int code = tokenService.validate(userId, token);
+        int code = tokenService.validate(userId, requestBody.getToken());
 
         if (VdResultErrorCode.ISFAILED(code)) {
 
@@ -71,7 +68,7 @@ public class StreamController {
         } else {
 
 
-            return vdService.removeServant(userId, servantIds);
+            return vdService.removeServant(userId, (List<String>)requestBody.getData());
         }
     }
 

@@ -60,10 +60,6 @@ public class VdServantManager extends AbstractServantAdapter {
 
         List<VdServantBean> servantBeans = this.getServantsAvailable(servantIds);
 
-        for (VdServantBean vds : servantBeans) {
-            servantMaps.remove(vds);
-        }
-
         for (String servantId : servantIds) {
             if (servantMaps.containsKey(servantId)) {
                 servantMaps.get(servantId).setState(VdServantBean.DELETING);

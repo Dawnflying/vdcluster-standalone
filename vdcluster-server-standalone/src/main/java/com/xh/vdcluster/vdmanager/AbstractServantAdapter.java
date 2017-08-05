@@ -47,6 +47,11 @@ public abstract class AbstractServantAdapter {
         scheduelTimer.schedule(task, 5000, 5000);
     }
 
+    /**
+     * 获取可用的service的adapter。
+     *
+     * @return
+     */
     protected DetectServiceAdapter getAvailableServiceAdapter() {
 
         for (DetectServiceAdapter adapter : adapterMaps.values()) {
@@ -63,7 +68,9 @@ public abstract class AbstractServantAdapter {
         return null;
     }
 
-
+    /**
+     * update all nodes‘s connection state
+     */
     private void updateNodes() {
 
         for (VdNode node : nodeList) {
@@ -73,15 +80,23 @@ public abstract class AbstractServantAdapter {
                     node.setNodeId(Md5Utils.MD5(node.getIpAddress() + ":" + node.getPort()));
                 try {
                     DetectServiceAdapter detectServiceAdapter = new DetectServiceAdapter(node.getIpAddress(), node.getPort());
+                    detectServiceAdapter.start();
                     detectServiceAdapter.isConnected = true;
-                    adapterMaps.put(node.getNodeId(),detectServiceAdapter);
+                    adapterMaps.put(node.getNodeId(), detectServiceAdapter);
+                    node.setConnected(true);
 
+                } catch (TException te) {
+
+                }
+            }
+            else{
+                DetectServiceAdapter adapter = adapterMaps.get(node.getNodeId());
+                try {
+                    adapter.ping();
                 }
                 catch (TException te){
-
+                    node.setConnected(false);
                 }
-
-
             }
 
         }
@@ -98,7 +113,7 @@ public abstract class AbstractServantAdapter {
 
             DetectServiceAdapter detectServiceAdapter = this.getAvailableServiceAdapter();
 
-            if(detectServiceAdapter == null) {
+            if (detectServiceAdapter == null) {
                 logger.info("no enough nodes available");
                 return;
             }
@@ -109,36 +124,32 @@ public abstract class AbstractServantAdapter {
             int slots = maxCount - services.size();
 
             for (VdServantBean servant : servantMaps.values()) {
-                if (services.contains(servant.getServantId()))
-                    continue;
-                else {
+                if (slots > 0) {
 
-                    if (slots > 0) {
+                    if (servant.getState() == VdServantBean.CREATED) {
 
-                        if (servant.getState() == VdServantBean.CREATED) {
+                        slots--;
+                        DetectServiceConfiguration configuration = new DetectServiceConfiguration();
+                        configuration.setServiceId(servant.getServantId());
+                        configuration.setStreamURL(servant.getStream().getUri());
+                        List<DetectType> detectTypes = new ArrayList<>();
+                        detectTypes.add(new DetectType("smoke", 0.9));
+                        configuration.setDetectType(detectTypes);
+                        configuration.setStreamType(0);
+                        configuration.setDecodeMode(0);
+                        configuration.setFrameHeight(300);
+                        configuration.setFrameWidth(400);
+                        detectServiceAdapter.addService(configuration);
+                        servant.setState(VdServantBean.RUNNING);
 
-                            slots--;
-                            DetectServiceConfiguration configuration = new DetectServiceConfiguration();
-                            configuration.setServiceId(servant.getServantId());
-                            configuration.setStreamURL(servant.getStream().getUri());
-                            List<DetectType> detectTypes = new ArrayList<>();
-                            detectTypes.add(new DetectType("smoke", 0.9));
-                            configuration.setDetectType(detectTypes);
-                            configuration.setStreamType(0);
-                            configuration.setDecodeMode(0);
-                            configuration.setFrameHeight(300);
-                            configuration.setFrameWidth(400);
-                            detectServiceAdapter.addService(configuration);
-                            servant.setState(VdServantBean.RUNNING);
-
-                        }
                     }
+                }
 
-                    if (servant.getState() == VdServantBean.DELETING) {
-                        slots++;
-                        detectServiceAdapter.deleteService(servant.getServantId());
-                        servant.setState(VdServantBean.DELETED);
-                    }
+                if (servant.getState() == VdServantBean.DELETING) {
+                    slots++;
+                    detectServiceAdapter.deleteService(servant.getServantId());
+                    servant.setState(VdServantBean.DELETED);
+
                 }
             }
 

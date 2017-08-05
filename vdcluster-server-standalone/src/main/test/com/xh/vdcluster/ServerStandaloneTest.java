@@ -1,6 +1,6 @@
 package com.xh.vdcluster;
 
-import com.xh.vdcluster.rabbitmq.MessageAdapter;
+import com.xh.vdcluster.message.rabbitmq.MessageAdapter;
 import com.xh.vdcluster.rpc.ReportService;
 import com.xh.vdcluster.rpc.ReportServiceAdapter;
 import com.xh.vdcluster.service.MessageService;

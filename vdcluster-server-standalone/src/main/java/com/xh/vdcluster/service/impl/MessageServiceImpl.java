@@ -1,6 +1,6 @@
 package com.xh.vdcluster.service.impl;
 
-import com.xh.vdcluster.rabbitmq.MessageAdapter;
+import com.xh.vdcluster.message.rabbitmq.MessageAdapter;
 import com.xh.vdcluster.service.MessageService;
 import org.springframework.stereotype.Component;
 

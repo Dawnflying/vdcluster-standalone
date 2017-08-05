@@ -43,23 +43,20 @@ public abstract class AbstractServiceAdapter {
     protected AbstractServiceAdapter(String host, int port) {
         this.host = host;
         this.port = port;
+        this.isConnected = false;
         listeners = new ConcurrentHashMap<>();
-
     }
 
-    public void start(){
-        try {
-            this.transport = new TSocket(host, port);
-            this.transport.open();
-            this.protocol = new TBinaryProtocol(this.transport);
-            this.client = new DetectService.Client(this.protocol);
-            this.timer = new Timer();
+    public void start() throws TException {
 
-            for(TransportListener listener: listeners.values()){
-                listener.onConnected();
-            }
-        } catch (TException t) {
+        this.transport = new TSocket(host, port, 2000);
+        this.transport.open();
+        this.protocol = new TBinaryProtocol(this.transport);
+        this.client = new DetectService.Client(this.protocol);
+        this.timer = new Timer();
 
+        for (TransportListener listener : listeners.values()) {
+            listener.onConnected();
         }
     }
 
@@ -84,7 +81,7 @@ public abstract class AbstractServiceAdapter {
             transport.open();
             isConnected = true;
 
-            for(TransportListener listener: listeners.values()){
+            for (TransportListener listener : listeners.values()) {
                 listener.onConnected();
             }
 
@@ -96,9 +93,9 @@ public abstract class AbstractServiceAdapter {
         timer.schedule(new AbstractServiceAdapter.RetryTask(), 5 * 1000);
     }
 
-    protected void disConnect(){
+    protected void disConnect() {
 
-        for(TransportListener listener: listeners.values()){
+        for (TransportListener listener : listeners.values()) {
             listener.onDisconnected();
         }
 

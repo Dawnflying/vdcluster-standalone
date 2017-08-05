@@ -1,6 +1,7 @@
 package com.xh.vdcluster.service.impl;
 
 import com.xh.vdcluster.authenication.Token;
+import com.xh.vdcluster.authenication.TokenManager;
 import com.xh.vdcluster.common.VdResultErrorCode;
 import com.xh.vdcluster.service.TokenService;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,9 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     public int validate(String id, String token) {
+
+        if (!TokenManager.checkTokenExpiration(token))
+            return VdResultErrorCode.TOKEN_EXPIRED;
 
         if(!tokenConcurrentMap.containsKey(id))
             return VdResultErrorCode.TOKEN_ERROR;
