@@ -1,5 +1,6 @@
 package com.xh.vdcluster.message.emqtt;
 
+import com.xh.vdcluster.message.BasicConsumer;
 import com.xh.vdcluster.message.MessageHandler;
 import org.fusesource.hawtdispatch.Dispatch;
 import org.fusesource.hawtdispatch.DispatchQueue;
@@ -53,13 +54,13 @@ public class MessageAdapter implements MessageHandler {
     public void publishMessage(String topic, String message) throws Exception {
 
         // send the message..
-        Future<Void> future = futureConnection.publish("foo", "Hello".getBytes(), QoS.AT_LEAST_ONCE, false);
+        Future<Void> future = futureConnection.publish(topic, message.getBytes(), QoS.AT_LEAST_ONCE, false);
         future.wait();
     }
 
     @Override
-    public void subscribeMessage(String topic) throws Exception {
-        Future<byte[]> future = futureConnection.subscribe(new Topic[]{new Topic(utf8("foo"), QoS.AT_LEAST_ONCE)});
+    public void subscribeMessage(String topic, BasicConsumer basicConsumer) throws Exception {
+        Future<byte[]> future = futureConnection.subscribe(new Topic[]{new Topic(utf8(topic), QoS.AT_LEAST_ONCE)});
         byte[] qoses = future.await();
         // We can start future receive..
         Future<Message> receive = futureConnection.receive();

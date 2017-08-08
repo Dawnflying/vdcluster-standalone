@@ -1,17 +1,18 @@
 package com.xh.vdcluster.message.rabbitmq;
 
-import com.rabbitmq.client.AMQP;
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.*;
+import com.xh.vdcluster.message.BasicConsumer;
 import com.xh.vdcluster.message.MessageHandler;
+import io.netty.channel.ChannelFuture;
 
 import java.io.IOException;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by bloom on 2017/7/20.
  */
-public class MessageAdapter implements MessageHandler{
+public class MessageAdapter implements MessageHandler {
 
     /**
      * 用户名
@@ -40,7 +41,15 @@ public class MessageAdapter implements MessageHandler{
 
     private ConnectionFactory connectionFactory;
 
-    private Channel channel;
+    /**
+     * 发送消息的通道
+     */
+    private Map<String, Channel> sendChannelMap;
+
+    /**
+     * 接收消息的通道
+     */
+    private Map<String, Channel> receiveChannelMap;
 
     /**
      * amqpUrl地址
@@ -50,23 +59,42 @@ public class MessageAdapter implements MessageHandler{
     /**
      * exchange 名称
      */
-    private String exchangeName;
+    private static final String exchangeName = "vdcluster";
 
     private static MessageAdapter client;
 
-    public static MessageAdapter getInstance() {
+    public static MessageAdapter getInstance(String username,String password,String hostname,int port,String virtualHost) {
+
+
         if (client == null)
-            client = new MessageAdapter();
+            client = new MessageAdapter(username,password,hostname,port,"");
 
         return client;
+    }
+
+    private MessageAdapter(String username,String password,String hostname,int port,String virtualHost) {
+        this.userName = username;
+        this.password = password;
+        this.hostName = hostname;
+        this.port = port;
+        this.virtualHost = virtualHost;
+        try {
+            connectionFactory = new ConnectionFactory();
+            connectionFactory.setUri(buildAMQPUrl());
+            this.sendChannelMap = new ConcurrentHashMap<>();
+            this.receiveChannelMap = new ConcurrentHashMap<>();
+
+        } catch (Exception e) {
+
+        }
     }
 
     private MessageAdapter() {
         try {
             connectionFactory = new ConnectionFactory();
             connectionFactory.setUri(buildAMQPUrl());
-            Connection connection = connectionFactory.newConnection();
-            this.channel = connection.createChannel();
+            this.sendChannelMap = new ConcurrentHashMap<>();
+            this.receiveChannelMap = new ConcurrentHashMap<>();
 
         } catch (Exception e) {
 
@@ -75,27 +103,64 @@ public class MessageAdapter implements MessageHandler{
 
     private String buildAMQPUrl() {
         StringBuilder builder = new StringBuilder();
-        builder.append("amqp://").append(userName).append(":").append(password).append("@").append(hostName + ":" + port + "/" + virtualHost);
+        builder.append("amqp://").append(userName).append(":").append(password).append("@").append(hostName + ":" + port);
         return builder.toString();
     }
 
 
-    public void publishMessage(String topic ,String message) throws IOException {
+    /**
+     * 发布消息，如果通道已经存在直接发送，如果通道不存在，创建新的通道以发布消息。
+     *
+     * @param topic   需要发布的主题
+     * @param message 发布的消息内容
+     * @throws Exception
+     */
+    public void publishMessage(String topic, String message) throws Exception {
         byte[] messageBodyBytes = message.getBytes();
-        channel.basicPublish(exchangeName, topic,
-                new AMQP.BasicProperties.Builder()
-                        .contentType("text/plain")
-                        .deliveryMode(2)
-                        .priority(1)
-                        .userId("bob")
-                        .build(),
-                messageBodyBytes);
+
+        if (sendChannelMap.containsKey(topic)) {
+            sendChannelMap.get(topic).basicPublish(exchangeName, topic, MessageProperties.PERSISTENT_TEXT_PLAIN, messageBodyBytes);
+        } else {
+            Channel newChannel = connectionFactory.newConnection().createChannel();
+            sendChannelMap.put(topic, newChannel);
+            newChannel.basicPublish(exchangeName, topic, MessageProperties.PERSISTENT_TEXT_PLAIN, messageBodyBytes);
+        }
+
     }
 
+    /**
+     * 订阅消息
+     *
+     * @param topic
+     */
     @Override
-    public void subscribeMessage(String topic) {
+    public void subscribeMessage(String topic, BasicConsumer consumer) throws Exception {
+        Channel channel = null;
+        if (receiveChannelMap.containsKey(topic)) {
+            channel = receiveChannelMap.get(topic);
+        } else {
+            channel = connectionFactory.newConnection().createChannel();
+            receiveChannelMap.put(topic, channel);
+        }
+        final Channel finalChannel = channel;
+        new DefaultConsumer(channel) {
+            @Override
+            public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
 
+
+                String message = new String(body, "UTF-8");
+
+                System.out.println(" [x] Received '" + message + "'");
+                try {
+                    consumer.consume(message);
+                } finally {
+                    System.out.println(" [x] Done");
+                    finalChannel.basicAck(envelope.getDeliveryTag(), false);
+                }
+            }
+        };
     }
+
 
     @Override
     public void disconnect() throws Exception {

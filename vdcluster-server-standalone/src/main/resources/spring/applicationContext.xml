@@ -37,6 +37,9 @@
             </map>
         </property>
     </bean>
+
+    <mvc:resources location="/WEB-INF/resources/" mapping="/resources/**" cache-period="3600"/>
+
     <bean id="jspViewResolver"
           class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/jsp/"/>

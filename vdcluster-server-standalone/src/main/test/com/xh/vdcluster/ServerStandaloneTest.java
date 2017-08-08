@@ -14,7 +14,7 @@ public class ServerStandaloneTest {
     public static void main(String[] args) {
         try {
 
-            MessageAdapter messageAdapter = MessageAdapter.getInstance();
+            MessageAdapter messageAdapter =  MessageAdapter.getInstance("vdcluster","vdcluster","10.200.8.102",5672,"/");
             messageAdapter.setHostName("10.200.8.102");
             messageAdapter.setPort(5672);
             messageAdapter.setUserName("vdcluster");
