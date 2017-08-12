@@ -59,7 +59,7 @@ public class MessageAdapter implements MessageHandler {
     /**
      * exchange 名称
      */
-    private static final String exchangeName = "vdcluster";
+    private static final String exchangeName = "";
 
     private static MessageAdapter client;
 
@@ -117,15 +117,17 @@ public class MessageAdapter implements MessageHandler {
      */
     public void publishMessage(String topic, String message) throws Exception {
         byte[] messageBodyBytes = message.getBytes();
-
+        Channel channel = null;
         if (sendChannelMap.containsKey(topic)) {
-            sendChannelMap.get(topic).basicPublish(exchangeName, topic, MessageProperties.PERSISTENT_TEXT_PLAIN, messageBodyBytes);
+            channel = sendChannelMap.get(topic);
         } else {
             Channel newChannel = connectionFactory.newConnection().createChannel();
             sendChannelMap.put(topic, newChannel);
-            newChannel.basicPublish(exchangeName, topic, MessageProperties.PERSISTENT_TEXT_PLAIN, messageBodyBytes);
+            channel = newChannel;
         }
 
+        channel.queueDeclare(topic, true, false, false, null);
+        channel.basicPublish(exchangeName, topic, MessageProperties.PERSISTENT_TEXT_PLAIN, messageBodyBytes);
     }
 
     /**
@@ -143,7 +145,8 @@ public class MessageAdapter implements MessageHandler {
             receiveChannelMap.put(topic, channel);
         }
         final Channel finalChannel = channel;
-        new DefaultConsumer(channel) {
+        finalChannel.queueDeclare(topic, true, false, false, null);
+        Consumer defaultConsumer =  new DefaultConsumer(finalChannel) {
             @Override
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
 
@@ -159,6 +162,8 @@ public class MessageAdapter implements MessageHandler {
                 }
             }
         };
+
+        channel.basicConsume(topic, false, defaultConsumer);
     }
 
 

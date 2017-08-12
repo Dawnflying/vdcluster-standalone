@@ -27,7 +27,7 @@ public class VdclusterSubscribe {
         MessageAdapter messageAdapter =  MessageAdapter.getInstance("vdcluster","vdcluster","10.200.8.102",5672,"/");
 
 
-        String topic = "test";
+        String topic = "task_queue";
 
         ConsumerTest test = new ConsumerTest();
 
@@ -36,7 +36,7 @@ public class VdclusterSubscribe {
         while(true){
 
             messageAdapter.publishMessage(topic,"just for funny!!!");
-            Thread.sleep(1000);
+                Thread.sleep(1000);
         }
     }
 }

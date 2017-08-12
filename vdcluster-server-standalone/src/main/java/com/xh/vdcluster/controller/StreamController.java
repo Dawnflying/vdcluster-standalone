@@ -1,6 +1,5 @@
 package com.xh.vdcluster.controller;
 
-import com.xh.vdcluster.authenication.TokenManager;
 import com.xh.vdcluster.common.*;
 import com.xh.vdcluster.common.annotation.Auth;
 import com.xh.vdcluster.service.TokenService;
