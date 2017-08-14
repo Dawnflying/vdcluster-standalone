@@ -1,4 +1,4 @@
-package com.xh.vdcluster.controller;
+package com.xh.vdcluster.controller.api;
 
 import com.xh.vdcluster.common.VdResult;
 import com.xh.vdcluster.service.UserService;

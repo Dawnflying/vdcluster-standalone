@@ -1,4 +1,4 @@
-package com.xh.vdcluster.controller;
+package com.xh.vdcluster.controller.api;
 
 import com.xh.vdcluster.common.*;
 import com.xh.vdcluster.common.annotation.Auth;
