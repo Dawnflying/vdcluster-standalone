@@ -5,7 +5,20 @@
   Time: 9:28
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page isELIgnored="false" %>
+<%@ page language="java" pageEncoding="utf-8" %>
+<%--<%@ include file="/WEB-INF/pages/common.jsp"%>--%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
+<%
+    //全路径的baseurl
+    String basep = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+    pageContext.setAttribute("basep", basep);
+    String ctx = request.getContextPath();
+    pageContext.setAttribute("ctx", ctx);
+%>
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
@@ -41,9 +54,9 @@
                             </div>
                         </div>
 
-                        <button type="button" class="btn btn-info">添加</button>
-                        <button type="button" class="btn btn-info">删除</button>
-                        <button type="button" class="btn btn-info">修改</button>
+                        <button type="button" class="btn btn-info" id="add-stream">添加</button>
+                        <button type="button" class="btn btn-info" id="delete-stream">删除</button>
+                        <button type="button" class="btn btn-info" id="modify-stream">修改</button>
                     </div>
 
                 </div>
@@ -52,11 +65,12 @@
                     <table class="table table-hover">
                         <tr>
                             <th>选中</th>
-                            <th>ID</th>
-                            <th>UserID</th>
-                            <th>StartTime</th>
-                            <th>Status</th>
-                            <th>RTSP Address</th>
+                            <th>流媒体ID</th>
+                            <th>节点ID</th>
+                            <th>添加时间</th>
+                            <th>状态</th>
+                            <th>流地址</th>
+                            <th>操作</th>
                         </tr>
                         <tr>
                             <td>
@@ -71,6 +85,9 @@
                             <td>11-7-2014</td>
                             <td><span class="label label-success">Approved</span></td>
                             <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
+                            <td><a class="btn" style="height: 20px">
+                                <i class="fa fa-play"></i> Play
+                            </a></td>
                         </tr>
                         <tr>
                             <td>
@@ -122,4 +139,17 @@
         </div>
     </div>
 </section>
+
+<script>
+
+    $('#add-stream').click(function () {
+
+        $.get("${ctx}/main/add-stream", {rtspUrl: 12312312312}, function (data) {
+
+            $("#content").html(data);
+
+        });
+
+    });
+</script>
 <!-- /.content -->
