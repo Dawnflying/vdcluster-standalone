@@ -26,6 +26,8 @@ public class LoginController extends BaseController {
         if(!userService.authenicate(username, code))
             return "error";
 
+
+
         this.getSession().setAttribute(Constant.AUTH_USER, username);
 
         return "main/main-page";

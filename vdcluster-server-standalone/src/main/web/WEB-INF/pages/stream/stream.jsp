@@ -144,7 +144,7 @@
 
     $('#add-stream').click(function () {
 
-        $.get("${ctx}/main/add-stream", {rtspUrl: 12312312312}, function (data) {
+        $.get("${ctx}/main/get-add-stream-page", {rtspUrl: 12312312312}, function (data) {
 
             $("#content").html(data);
 

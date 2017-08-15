@@ -6,5 +6,5 @@ package com.xh.vdcluster.common;
 public class Constant {
 
     public static final String AUTH_USER = "auth_user";
-
+    public static final String AUTH_USER_ID = "auth_user_id";
 }
