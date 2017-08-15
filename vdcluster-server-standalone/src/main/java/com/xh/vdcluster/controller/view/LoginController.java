@@ -7,8 +7,10 @@ import com.xh.vdcluster.service.UserService;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created by bloom on 2017/8/12.
@@ -21,12 +23,10 @@ public class LoginController extends BaseController {
     UserService userService;
 
     @RequestMapping("/do-login")
-    public String login(HttpRequest request, String username, String code) {
+    public String login(@RequestParam("username") String username, @RequestParam("code")String code) {
 
         if(!userService.authenicate(username, code))
             return "error";
-
-
 
         this.getSession().setAttribute(Constant.AUTH_USER, username);
 

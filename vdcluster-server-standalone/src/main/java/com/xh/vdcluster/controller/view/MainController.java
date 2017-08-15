@@ -7,6 +7,7 @@ import com.xh.vdcluster.service.VdService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -52,7 +53,8 @@ public class MainController extends BaseController {
     }
 
     @RequestMapping("/add-stream")
-    public String addStream(@RequestParam(name = "rtspUrl") String rtspUrl, @RequestParam(name = "frameHeight") Integer frameHeight, @RequestParam(name = "frameWidth") Integer frameWidth,@RequestParam(name = "typeList") List<String> typeList) {
+    @ResponseBody
+    public String addStream(@RequestParam(name = "rtspUrl") String rtspUrl, @RequestParam(name = "frameHeight") String frameHeight, @RequestParam(name = "frameWidth") String frameWidth,@RequestParam("typeList") String[] typeList) {
 
         String userId = (String)this.getSession().getAttribute(Constant.AUTH_USER_ID);
 
@@ -65,8 +67,8 @@ public class MainController extends BaseController {
         configuration.setStreamType(0);
         configuration.setDecodeMode(0);
         configuration.setServiceId(Md5Utils.MD5(rtspUrl));
-        configuration.setFrameHeight(frameHeight);
-        configuration.setFrameWidth(frameWidth);
+        configuration.setFrameHeight(Integer.valueOf(frameHeight));
+        configuration.setFrameWidth(Integer.valueOf(frameWidth));
         configuration.setStreamURL(rtspUrl);
         configurationList.add(configuration);
 

@@ -52,43 +52,56 @@
         <!-- /.box-body -->
 
         <div class="box-footer">
-            <button type="submit" class="btn btn-primary" id="submit">确认</button>
-            <button type="submit" class="btn btn-primary" id="cancel">取消</button>
+            <button class="btn btn-primary" id="confirm" onclick="doConfirm();">确认</button>
+            <button class="btn btn-primary" id="cancel" onclick="doCancel();">取消</button>
         </div>
     </form>
 </div>
 <script>
-    $("#submit").click(function () {
-        var detectList = [];
-        if ($("#smokeType").checked)
+
+    function doConfirm() {
+        var detectList = new Array();
+        if ($("#smokeType").prop("checked"))
             detectList.push("smoke");
-        if ($("#fireType").checked)
+        if ($("#fireType").prop("checked"))
             detectList.push("fire");
-        if ($("personType").checked)
+        if ($("personType").prop("checked"))
             detectList.push("person");
+        console.log(detectList);
+        <%--$.get("${ctx}/main/add-stream", {--%>
+            <%--rtspUrl: $("#rtspUrl").val(), frameHeight: $("#frameHeight").val(),--%>
+            <%--frameWidth: $("#frameWidth").val(), typeList: detectList--%>
+        <%--}, function (data) {--%>
 
-        $.get("${ctx}/main/add-stream", {
-            rtspUrl: $("#rtspUrl").val(), frameHeight: $("#frameHeight").val(),
-            frameWidth: $("#frameWidth").val(), typeList:detectList
-        }, function (data) {
+        <%--});--%>
 
+        $.ajax({
+            url: "${ctx}/main/add-stream",
+            async:false,
+            traditional:true,
+            data:{rtspUrl: $("#rtspUrl").val(), frameHeight: $("#frameHeight").val(),
+                frameWidth: $("#frameWidth").val(), typeList:detectList}, //最主要的，设置参数，
+            success:function(data){
+
+            }
         });
 
         $.get("${ctx}/main/get-stream-list", {}, function (data) {
+            alert("comfirmed");
             $("#content").html(data);
         });
+    }
 
-    });
-
-    $("#cancel").click(function () {
-
-
+    function doCancel(){
+        alert("comfirmed");
         $.get("${ctx}/main/get-stream-list", {}, function (data) {
-
+            alert("comfirmed");
             $("#content").html(data);
 
         });
-    });
+    }
+
+
 
 </script>
 <!-- /.box -->
