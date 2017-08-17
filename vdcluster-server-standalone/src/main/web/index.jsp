@@ -54,7 +54,7 @@
     <div class="login-box-body">
         <p class="login-box-msg">Sign in to start your session</p>
 
-        <form id="login-form" action="${ctx}/login/do-login">
+        <form id="login-form" action="${ctx}/login/do-login" onsubmit="md5PWD();">
             <div class="form-group has-feedback">
                 <input type="text" class="form-control" placeholder="用户名" name="username">
                 <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
@@ -73,7 +73,7 @@
                 </div>
                 <!-- /.col -->
                 <div class="col-xs-4">
-                    <button type="submit" class="btn btn-primary btn-block btn-flat" id="submit">登录</button>
+                    <button class="btn btn-primary btn-block btn-flat" id="submit">登录</button>
                 </div>
                 <!-- /.col -->
             </div>
@@ -125,11 +125,11 @@
 
 
     function md5PWD(){
-        if($("input[name='password']").val()=="默认密码"){
+        if($("input[name='code']").val()=="默认密码"){
             return;
         }
-        var md5PWD = $("input[name='password']").val();
-        $("input[name='password']").val($.md5(md5PWD)) ;//不同的md5.js调用的方法可能不同
+        var md5PWD = $("input[name='code']").val();
+        $("input[name='code']").val($.md5(md5PWD)) ;//不同的md5.js调用的方法可能不同
     }
 </script>
 </body>

@@ -87,7 +87,6 @@
         });
 
         $.get("${ctx}/main/get-stream-list", {}, function (data) {
-            alert("comfirmed");
             $("#content").html(data);
         });
     }

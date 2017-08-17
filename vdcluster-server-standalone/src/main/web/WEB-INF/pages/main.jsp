@@ -244,7 +244,6 @@
     });
 
     $(function(){
-        alert("restart");
         $.get("${ctx}/main/get-stream-list",{},function(data){
 
             $("#content").html(data);

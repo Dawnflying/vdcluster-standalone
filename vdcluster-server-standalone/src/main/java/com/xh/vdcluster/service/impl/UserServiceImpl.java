@@ -55,7 +55,9 @@ public class UserServiceImpl implements UserService {
         try {
             User user = userMapper.getUserByUsername(name);
 
-            if (code.equals(Md5Utils.MD5(user.getPassword())))
+            String orginCode = Md5Utils.MD5(user.getPassword());
+
+            if (code.equalsIgnoreCase(orginCode))
                 return true;
 
             return false;
