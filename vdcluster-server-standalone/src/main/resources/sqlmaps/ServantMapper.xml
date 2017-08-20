@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xh.vdcluster.repository.mapper.ServantMapper" >
+  <resultMap id="BaseResultMap" type="com.xh.vdcluster.repository.model.Servant" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="servantId" property="servantid" jdbcType="VARCHAR" />
+    <result column="userId" property="userid" jdbcType="INTEGER" />
+    <result column="streamId" property="streamid" jdbcType="INTEGER" />
+    <result column="startTime" property="starttime" jdbcType="TIMESTAMP" />
+    <result column="expireTime" property="expiretime" jdbcType="TIMESTAMP" />
+    <result column="frameWidth" property="framewidth" jdbcType="INTEGER" />
+    <result column="frameHeight" property="frameheight" jdbcType="INTEGER" />
+    <result column="decodeMode" property="decodemode" jdbcType="INTEGER" />
+    <result column="streamType" property="streamtype" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, servantId, userId, streamId, startTime, expireTime, frameWidth, frameHeight, 
+    decodeMode, streamType
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from servant
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from servant
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.xh.vdcluster.repository.model.Servant" >
+    insert into servant (id, servantId, userId, 
+      streamId, startTime, expireTime, 
+      frameWidth, frameHeight, decodeMode, 
+      streamType)
+    values (#{id,jdbcType=INTEGER}, #{servantid,jdbcType=VARCHAR}, #{userid,jdbcType=INTEGER}, 
+      #{streamid,jdbcType=INTEGER}, #{starttime,jdbcType=TIMESTAMP}, #{expiretime,jdbcType=TIMESTAMP}, 
+      #{framewidth,jdbcType=INTEGER}, #{frameheight,jdbcType=INTEGER}, #{decodemode,jdbcType=INTEGER}, 
+      #{streamtype,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xh.vdcluster.repository.model.Servant" >
+    insert into servant
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="servantid != null" >
+        servantId,
+      </if>
+      <if test="userid != null" >
+        userId,
+      </if>
+      <if test="streamid != null" >
+        streamId,
+      </if>
+      <if test="starttime != null" >
+        startTime,
+      </if>
+      <if test="expiretime != null" >
+        expireTime,
+      </if>
+      <if test="framewidth != null" >
+        frameWidth,
+      </if>
+      <if test="frameheight != null" >
+        frameHeight,
+      </if>
+      <if test="decodemode != null" >
+        decodeMode,
+      </if>
+      <if test="streamtype != null" >
+        streamType,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="servantid != null" >
+        #{servantid,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="streamid != null" >
+        #{streamid,jdbcType=INTEGER},
+      </if>
+      <if test="starttime != null" >
+        #{starttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="expiretime != null" >
+        #{expiretime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="framewidth != null" >
+        #{framewidth,jdbcType=INTEGER},
+      </if>
+      <if test="frameheight != null" >
+        #{frameheight,jdbcType=INTEGER},
+      </if>
+      <if test="decodemode != null" >
+        #{decodemode,jdbcType=INTEGER},
+      </if>
+      <if test="streamtype != null" >
+        #{streamtype,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xh.vdcluster.repository.model.Servant" >
+    update servant
+    <set >
+      <if test="servantid != null" >
+        servantId = #{servantid,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null" >
+        userId = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="streamid != null" >
+        streamId = #{streamid,jdbcType=INTEGER},
+      </if>
+      <if test="starttime != null" >
+        startTime = #{starttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="expiretime != null" >
+        expireTime = #{expiretime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="framewidth != null" >
+        frameWidth = #{framewidth,jdbcType=INTEGER},
+      </if>
+      <if test="frameheight != null" >
+        frameHeight = #{frameheight,jdbcType=INTEGER},
+      </if>
+      <if test="decodemode != null" >
+        decodeMode = #{decodemode,jdbcType=INTEGER},
+      </if>
+      <if test="streamtype != null" >
+        streamType = #{streamtype,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xh.vdcluster.repository.model.Servant" >
+    update servant
+    set servantId = #{servantid,jdbcType=VARCHAR},
+      userId = #{userid,jdbcType=INTEGER},
+      streamId = #{streamid,jdbcType=INTEGER},
+      startTime = #{starttime,jdbcType=TIMESTAMP},
+      expireTime = #{expiretime,jdbcType=TIMESTAMP},
+      frameWidth = #{framewidth,jdbcType=INTEGER},
+      frameHeight = #{frameheight,jdbcType=INTEGER},
+      decodeMode = #{decodemode,jdbcType=INTEGER},
+      streamType = #{streamtype,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+  <select id="listByUserId" parameterType="java.lang.String" resultMap="com.xh.vdcluster.repository.mapper.StreamMapper.BaseResultMap">
+    select s.id,s.name,s.protocol,s.ipaddress,s.port,s.expiredtime,s.uri from servant,stream s, user u where servant.streamId = s.id
+    and servant.userId = u.id and u.userId = #{userId,jdbcType=VARCHAR}
+  </select>
+
+  <select id="listAll" resultMap="com.xh.vdcluster.repository.mapper.StreamMapper.BaseResultMap">
+    select s.id,s.name,s.protocol,s.ipaddress,s.port,s.expiredtime,s.uri from servant,stream s where servant.streamId = s.id
+  </select>
+
+  <select id="listAllServant" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from servant limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+  </select>
+</mapper>
