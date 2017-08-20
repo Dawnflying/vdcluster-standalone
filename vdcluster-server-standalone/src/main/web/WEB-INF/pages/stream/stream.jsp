@@ -72,6 +72,27 @@
                             <th>流地址</th>
                             <th>操作</th>
                         </tr>
+
+                        <c:forEach var="stream" items="${streamList}">
+                            <tr>
+                                <td>
+                                    <div class="checkbox icheck">
+                                        <label>
+                                            <input type="checkbox">
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>${stream.id}</td>
+                                <td>John Doe</td>
+                                <td>11-7-2014</td>
+                                <td><span class="label label-success">正在运行</span></td>
+                                <td>${stream.uri}</td>
+                                <td><a class="btn" style="height: 20px">
+                                    <i class="fa fa-play"></i> Play
+                                </a></td>
+                            </tr>
+
+                        </c:forEach>
                         <tr>
                             <td>
                                 <div class="checkbox icheck">

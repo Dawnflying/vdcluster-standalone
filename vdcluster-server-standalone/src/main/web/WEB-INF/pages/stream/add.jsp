@@ -51,11 +51,13 @@
         </div>
         <!-- /.box-body -->
 
-        <div class="box-footer">
-            <button class="btn btn-primary" id="confirm" onclick="doConfirm();">确认</button>
-            <button class="btn btn-primary" id="cancel" onclick="doCancel();">取消</button>
-        </div>
+
     </form>
+
+    <div class="box-footer">
+        <button class="btn btn-primary" id="confirm" onclick="doConfirm();">确认</button>
+        <button class="btn btn-primary" id="cancel" onclick="doCancel();">取消</button>
+    </div>
 </div>
 <script>
 

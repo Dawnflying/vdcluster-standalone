@@ -17,5 +17,4 @@ public interface VdServantMapper {
 
     int updateByPrimaryKey(VdServant record);
 
-    List<VdServant> listServantByUserId(String userId);
 }

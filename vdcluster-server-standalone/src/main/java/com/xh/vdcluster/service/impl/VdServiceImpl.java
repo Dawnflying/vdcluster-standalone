@@ -4,12 +4,8 @@ import com.xh.vdcluster.authenication.TokenManager;
 import com.xh.vdcluster.common.DetectServiceConfiguration;
 import com.xh.vdcluster.common.VdResult;
 import com.xh.vdcluster.common.VdResultErrorCode;
-import com.xh.vdcluster.repository.mapper.StreamMapper;
-import com.xh.vdcluster.repository.mapper.UserMapper;
-import com.xh.vdcluster.repository.mapper.VdServantMapper;
-import com.xh.vdcluster.repository.model.Stream;
-import com.xh.vdcluster.repository.model.User;
-import com.xh.vdcluster.repository.model.VdServant;
+import com.xh.vdcluster.repository.mapper.*;
+import com.xh.vdcluster.repository.model.*;
 import com.xh.vdcluster.service.VdService;
 import com.xh.vdcluster.vdmanager.VdServantManager;
 import com.xh.vdcluster.vdmanager.beans.VdServantBean;
@@ -32,10 +28,12 @@ public class VdServiceImpl implements VdService {
     StreamMapper streamMapper;
 
     @Resource
-    VdServantMapper vdServantMapper;
+    ServantMapper servantMapper;
 
     @Resource
     VdServantManager vdServantManager;
+
+
 
     @Override
     public VdResult addServant(String userId, List<DetectServiceConfiguration> configurationList) {
@@ -53,11 +51,26 @@ public class VdServiceImpl implements VdService {
         String servantId = "";
         for (DetectServiceConfiguration configuration : configurationList) {
             servantId = VdServantManager.generateServantId(configuration.getStreamURL());
-            Stream stream = new Stream();
-            stream.setServantId(servantId);
-            stream.setUserid(user.getId());
-            stream.setUri(configuration.getStreamURL());
-            streamMapper.insert(stream);
+
+            Stream s = streamMapper.selectByUri(configuration.getStreamURL());
+
+            Integer streamId = 0;
+
+            if(s != null)
+                streamId = s.getId();
+            else {
+                Stream stream = new Stream();
+                stream.setServantId(servantId);
+                stream.setUri(configuration.getStreamURL());
+                streamId = streamMapper.insert(stream);
+            }
+
+            Servant servant = new Servant();
+            servant.setServantid(servantId);
+            servant.setStreamid(streamId);
+            servant.setUserid(user.getId());
+
+            servantMapper.insert(servant);
         }
 
         List<VdServantBean> servants = vdServantManager.createServants(configurationList);
@@ -85,6 +98,12 @@ public class VdServiceImpl implements VdService {
         List<VdServantBean> vdServants = vdServantManager.removeServants(servantIds);
 
         return new VdResult("ok", VdResultErrorCode.SERVANT_SUCCESS, vdServants, userId);
+    }
+
+    @Override
+    public List<Servant> listAllServant(Integer pageIndex, Integer pageSize, Integer pageCount) {
+
+        return servantMapper.listAllServant(pageIndex*pageCount,pageSize);
     }
 
 

@@ -13,8 +13,6 @@ public class Stream {
 
     private Integer port;
 
-    private Integer userid;
-
     private Date expiredtime;
 
     private String uri;
@@ -59,14 +57,6 @@ public class Stream {
 
     public void setPort(Integer port) {
         this.port = port;
-    }
-
-    public Integer getUserid() {
-        return userid;
-    }
-
-    public void setUserid(Integer userid) {
-        this.userid = userid;
     }
 
     public Date getExpiredtime() {

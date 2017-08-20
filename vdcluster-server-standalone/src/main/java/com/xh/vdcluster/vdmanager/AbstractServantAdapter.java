@@ -126,6 +126,13 @@ public abstract class AbstractServantAdapter {
             for (VdServantBean servant : servantMaps.values()) {
                 if (slots > 0) {
 
+                    //如果没有在线，则将状态设置为重新创建
+                    if(services.contains(servant.getServantId()))
+                        continue;
+                    else{
+                        servant.setState(VdServantBean.CREATED);
+                    }
+
                     if (servant.getState() == VdServantBean.CREATED) {
 
                         slots--;

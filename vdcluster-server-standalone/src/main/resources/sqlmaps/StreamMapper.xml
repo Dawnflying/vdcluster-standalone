@@ -7,12 +7,11 @@
     <result column="protocol" jdbcType="VARCHAR" property="protocol" />
     <result column="ipaddress" jdbcType="VARCHAR" property="ipaddress" />
     <result column="port" jdbcType="INTEGER" property="port" />
-    <result column="userid" jdbcType="INTEGER" property="userid" />
     <result column="expiredtime" jdbcType="DATE" property="expiredtime" />
     <result column="uri" jdbcType="VARCHAR" property="uri" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, name, protocol, ipaddress, port, userid, expiredtime, uri
+    id, name, protocol, ipaddress, port, expiredtime, uri
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -24,12 +23,12 @@
     delete from stream
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.xh.vdcluster.repository.model.Stream">
+  <insert id="insert" parameterType="com.xh.vdcluster.repository.model.Stream" useGeneratedKeys="true" keyProperty="id">
     insert into stream (id, name, protocol, 
-      ipaddress, port, userid, 
+      ipaddress, port,
       expiredtime, uri)
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{protocol,jdbcType=VARCHAR}, 
-      #{ipaddress,jdbcType=VARCHAR}, #{port,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, 
+      #{ipaddress,jdbcType=VARCHAR}, #{port,jdbcType=INTEGER},
       #{expiredtime,jdbcType=DATE}, #{uri,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.xh.vdcluster.repository.model.Stream">
@@ -49,9 +48,6 @@
       </if>
       <if test="port != null">
         port,
-      </if>
-      <if test="userid != null">
-        userid,
       </if>
       <if test="expiredtime != null">
         expiredtime,
@@ -76,9 +72,6 @@
       <if test="port != null">
         #{port,jdbcType=INTEGER},
       </if>
-      <if test="userid != null">
-        #{userid,jdbcType=INTEGER},
-      </if>
       <if test="expiredtime != null">
         #{expiredtime,jdbcType=DATE},
       </if>
@@ -102,9 +95,6 @@
       <if test="port != null">
         port = #{port,jdbcType=INTEGER},
       </if>
-      <if test="userid != null">
-        userid = #{userid,jdbcType=INTEGER},
-      </if>
       <if test="expiredtime != null">
         expiredtime = #{expiredtime,jdbcType=DATE},
       </if>
@@ -120,9 +110,17 @@
       protocol = #{protocol,jdbcType=VARCHAR},
       ipaddress = #{ipaddress,jdbcType=VARCHAR},
       port = #{port,jdbcType=INTEGER},
-      userid = #{userid,jdbcType=INTEGER},
       expiredtime = #{expiredtime,jdbcType=DATE},
       uri = #{uri,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="countByUri" parameterType="java.lang.String" resultType="java.lang.Integer">
+    select count(*) from stream where uri = #{uri,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectByUri" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from stream where uri=#{uri,jdbcType=VARCHAR}
+  </select>
 </mapper>

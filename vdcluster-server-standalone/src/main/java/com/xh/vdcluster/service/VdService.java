@@ -2,6 +2,7 @@ package com.xh.vdcluster.service;
 
 import com.xh.vdcluster.common.DetectServiceConfiguration;
 import com.xh.vdcluster.common.VdResult;
+import com.xh.vdcluster.repository.model.Servant;
 
 import java.util.List;
 
@@ -15,4 +16,6 @@ public interface VdService {
     VdResult stopServant(String userId, List<String> servantIds);
 
     VdResult removeServant(String userId, List<String> servantIds);
+
+    List<Servant> listAllServant(Integer pageIndex, Integer pageSize, Integer pageCount);
 }

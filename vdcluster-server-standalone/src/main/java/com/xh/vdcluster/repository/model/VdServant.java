@@ -5,7 +5,7 @@ public class VdServant {
 
     private String servantId;
 
-    private String streamId;
+    private Integer streamId;
 
     private Integer userId;
 
@@ -25,12 +25,12 @@ public class VdServant {
         this.servantId = servantId == null ? null : servantId.trim();
     }
 
-    public String getStreamId() {
+    public Integer getStreamId() {
         return streamId;
     }
 
-    public void setStreamId(String streamId) {
-        this.streamId = streamId == null ? null : streamId.trim();
+    public void setStreamId(Integer streamId) {
+        this.streamId = streamId;
     }
 
     public Integer getUserId() {

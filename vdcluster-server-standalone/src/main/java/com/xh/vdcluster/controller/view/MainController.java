@@ -2,12 +2,17 @@ package com.xh.vdcluster.controller.view;
 
 import com.xh.vdcluster.common.*;
 import com.xh.vdcluster.controller.BaseController;
+import com.xh.vdcluster.repository.model.Servant;
+import com.xh.vdcluster.repository.model.Stream;
+import com.xh.vdcluster.service.StreamService;
 import com.xh.vdcluster.service.TokenService;
 import com.xh.vdcluster.service.VdService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -27,6 +32,9 @@ public class MainController extends BaseController {
     @Resource
     VdService vdService;
 
+    @Resource
+    StreamService streamService;
+
     @RequestMapping("main-page")
     public String getMainPage() {
         return "main";
@@ -34,9 +42,13 @@ public class MainController extends BaseController {
 
 
     @RequestMapping("/get-stream-list")
-    public String getStreamList() {
+    public String getStreamList(ModelMap modelMap) {
 
+        String userId = (String)this.getSession().getAttribute(Constant.AUTH_USER_ID);
+        List<Stream> streams = streamService.listStreamsByUserId(userId);
+        modelMap.put("streamList",streams);
 
+        List<Servant> servants = vdService.listAllServant(0,20,20);
         return "stream/stream";
     }
 

@@ -18,4 +18,7 @@ public interface StreamService {
     Stream unregisterStream();
 
     boolean registerStream(Stream streamModel);
+
+
+    List<Stream> listStreamsByUserId(String userId);
 }

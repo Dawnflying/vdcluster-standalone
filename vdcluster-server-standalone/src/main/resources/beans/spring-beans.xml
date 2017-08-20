@@ -32,5 +32,7 @@
         <constructor-arg name="service" ref="reportService"/>
     </bean>
 
+    <bean id="vdServant" class="com.xh.vdcluster.vdmanager.VdManager" init-method="init">
 
+    </bean>
 </beans>
